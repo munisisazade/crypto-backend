@@ -1,0 +1,23 @@
+{% extends "Base/index.html" %}
+{% block content %}
+<section class="admin">
+    <a type="button" class="btn btn-primary tohome" href="{% url 'logout' %}">Go to Home ></a>
+    <div class="container">
+        <div class="admin-wrap">
+            <h1 class="text-center">Son təyin olunmuş əlifba simvolları</h1>
+            <ul class="alphabet-list">
+                {% for l in list.get_alphabet_letters %}
+                <li>{{l}}</li>
+                {% endfor %}
+            </ul>
+            <h2 class="text-center">Əlifbanı dəyişdir</h2>
+            <form method="post">
+                {% csrf_token %}
+                <textarea value="ABCDEF" class="change-alphabet" name="details"
+                          placeholder="Change Alphabet"></textarea>
+                <button type="submit" class="btn btn-primary">Yadda saxla</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}
