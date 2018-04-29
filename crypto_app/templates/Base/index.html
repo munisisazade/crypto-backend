@@ -3,7 +3,8 @@
 <!--[if IE 7]><html class="no-js ie7 oldie" lang="en"><![endif]-->
 <!--[if IE 8]><html class="no-js ie8 oldie" lang="en"><![endif]-->
 <!--[if IE 9]><html class="no-js ie9" lang="en"><![endif]-->
-<!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js" lang="en"><!--<![endif]-->
 <head>
 
     <meta charset="utf-8">
@@ -15,23 +16,19 @@
     <meta name="author" content="">
     {% load static %}
     <title>{% block title %}Crypto{% endblock title %}</title>
-    
+
     <!-- injector:css -->
-     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/design.min.css' %}">
     <!-- endinjector -->
-    
+
     <!-- injector:js -->
     <script src="{% static 'js/min/assets/jquery.min.js' %}"></script>
     <script src="{% static 'js/min/assets/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/min/app.min.js' %}"></script>
 
 </head>
-<body>
-
-
+<body class="{% block body_class %}{% endblock %}">
 {% block content %}{% endblock content %}
-
-{% comment %} <script src="//localhost:35729/livereload.js"></script> {% endcomment %}
 </body>
 </html>

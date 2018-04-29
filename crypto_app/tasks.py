@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 from .models import Alphabed
 import math
 from itertools import *
-
+from .encoder import *
 from celery import shared_task
 
 
@@ -34,3 +34,19 @@ def create_alphabet(_list):
                 _letters += str(line) + "\n"
     f.letters = _letters
     f.save()
+
+
+@shared_task
+def encoder_task(text, token):
+    _alphabed = Alphabed.objects.last()
+    _encoder = Encoder(token=token, alphabet=_alphabed)
+    return _encoder.encode(text)
+
+
+@shared_task
+def decoder_task(text, token):
+    _alphabed = Alphabed.objects.last()
+    _encoder = Encoder(token=token, alphabet=_alphabed)
+    return _encoder.decode(text)
+
+

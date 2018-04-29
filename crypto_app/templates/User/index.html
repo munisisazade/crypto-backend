@@ -1,45 +1,47 @@
 {% extends "Base/index.html" %}
 {% block content %}
-<section class="user">
-    <button type="button" class="btn btn-primary tohome">Go to Home ></button>
-    <div class="container">
-        <div class="user-wrap">
-            <h1 class="text-center">Encode / Decode Operations</h1>
+    <section class="user">
+        <a href="{% url "logout" %}" type="button" class="btn btn-primary tohome">Go to Home ></a>
+        <div class="container">
+            <div class="user-wrap">
+                <h1 class="text-center">Encode / Decode Operations</h1>
+                <h3 class="text-center">Alphabet list</h3>
+                <p class="text-center">{{ alphabet }}</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="user-item">
+                            <form method="post">
+                                {% csrf_token %}
+                                <h2 class="text-center">Encode</h2>
+                                <textarea name="encode" placeholder="Encode" >{{ encode|default:""}}</textarea>
+                                <textarea name="token" placeholder="Token">{{ token|default:""}}</textarea>
+                                <button name="encode_form" type="submit" class="btn btn-primary">Encode</button>
+                            </form>
+                        </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="user-item">
-                        <h2 class="text-center">Encode</h2>
-                        <textarea name="encode" placeholder="Encode"></textarea>
-                        <button type="button" class="btn btn-primary">Encode</button>
+                        <div class="result">
+                            <h4>Encode Result</h4>
+                            <p>{{ encoded }}</p>
+                        </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="user-item">
+                            <form method="post">
+                                {% csrf_token %}
+                                <h2 class="text-center">Decode</h2>
+                                <textarea name="decode" placeholder="Decode">{{ decode|default:"" }}</textarea>
+                                <textarea name="token" placeholder="Token">{{ token|default:"" }}</textarea>
+                                <button name="decode_form" type="submit" class="btn btn-primary">Encode</button>
+                            </form>
+                        </div>
 
-                    <div class="result">
-                        <h4>Encode Result</h4>
-                        <p>ABSGDGTSBDUBSHU</p>
+                        <div class="result">
+                            <h4>Decode Result</h4>
+                            <p>{{ decoded|default:"DECODE TEXT" }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="user-item">
-                        <h2 class="text-center">Decode</h2>
-                        <textarea name="decode" placeholder="Decode"></textarea>
-                        <button type="button" class="btn btn-primary">Decode</button>
-                    </div>
-
-                    <div class="result">
-                        <h4>Decode Result</h4>
-                        <p>TESTDECODETEXT</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="text-center">
-                    <a href='{% url "logout" %}' class="btn btn-primary">
-                        logout
-                    </a>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 {% endblock content %}

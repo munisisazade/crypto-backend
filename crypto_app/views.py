@@ -1,10 +1,9 @@
 from django.contrib.auth import login
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import generic
-from .tasks import create_alphabet
 from .forms import BaseAuthenticationForm
 from .models import Alphabed
+from .tasks import create_alphabet, encoder_task, decoder_task
 
 
 # Create your views here.
@@ -29,7 +28,7 @@ class BaseIndexView(generic.FormView):
         return super(BaseIndexView, self).form_valid(form)
 
     def form_invalid(self, form):
-        return HttpResponse(form.errors)
+        return super(BaseIndexView, self).form_invalid(form)
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -52,10 +51,39 @@ class AdminView(generic.TemplateView):
         return render(request, self.template_name, self.get_context_data(*args, **kwargs))
 
     def get_context_data(self, *args, **kwargs):
-        context = {}
-        context["list"] = Alphabed.objects.last()
+        context = {"list": Alphabed.objects.last()}
         return context
 
 
 class UserView(generic.TemplateView):
     template_name = "User/index.html"
+
+    def get_context_data(self, **kwargs):
+        _a = Alphabed.objects.last()
+        if _a:
+            ctx = {"alphabet": Alphabed.objects.last()}
+        else:
+            ctx = dict()
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        _ctx = self.get_context_data(*args, **kwargs)
+        if u'encode_form' in request.POST:
+            _encode = request.POST.get("encode").upper()
+            _token = request.POST.get("token").upper()
+            encoded = encoder_task(text=_encode, token=_token)
+            _ctx["encoded"] = encoded
+            _ctx["encode"] = _encode
+            _ctx["token"] = _token
+            return render(request, self.template_name, context=_ctx)
+        elif u'decode_form' in request.POST:
+            _decode = request.POST.get("decode").upper()
+            _token = request.POST.get("token").upper()
+            decoded = decoder_task(text=_decode, token=_token)
+            _ctx["decoded"] = decoded
+            _ctx["encoded"] = _decode
+            _ctx["decode"] = _decode
+            _ctx["encode"] = decoded
+            _ctx["token"] = _token
+            return render(request, self.template_name, context=_ctx)
+        return render(request, self.template_name, self.get_context_data(*args, **kwargs))
