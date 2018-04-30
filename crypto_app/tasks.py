@@ -66,7 +66,7 @@ def decoder_task(text, token):
         return {"error": "no-text"}
     elif not token:
         return {"error": "no-token"}
-    for i, x in enumerate(text):
+    for i, x in enumerate(text.split("&")[0]):
         if x not in _alphabed.title:
             interruption = True
     for i, x in enumerate(token):
