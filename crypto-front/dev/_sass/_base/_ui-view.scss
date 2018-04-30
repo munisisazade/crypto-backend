@@ -116,6 +116,9 @@ body {
                 }
             }
         }
+        .modal-footer{
+            margin-top: 25px;
+        }
     }
 }
 
@@ -310,14 +313,14 @@ a.animated-button.thar-three:before {
 .user {
     .user-wrap {
         .user-item {
-            margin-top: 60px;
+            margin-top: 20px;
         }
 
         color: white;
         text-align: center;
 
         h1 {
-            margin-top: 40px;
+            margin-top: 20px;
         }
 
         h2 {
@@ -325,7 +328,7 @@ a.animated-button.thar-three:before {
             text-decoration: underline;
         }
 
-        textarea {
+        textarea,input {
             width: 450px;
             margin: 10px 0;
             padding: 5px 8px;
@@ -390,6 +393,6 @@ a.animated-button.thar-three:before {
     border: 1px solid cornsilk;
     padding: 10px;
     width: 400px;
-    margin: 40px auto 0 auto;
+    margin: 20px auto 0 auto;
     min-height: 80px;
 }
