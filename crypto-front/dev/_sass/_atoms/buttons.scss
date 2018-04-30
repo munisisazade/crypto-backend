@@ -1,0 +1,13 @@
+// Buttons
+// @include button-variant(color, background-color, border-color);
+.btn {
+
+  &-rounded {
+    border-radius: 30px;
+  }
+
+  // variations
+  &-red {
+    @include button-variant($white, $brand-red, $white);
+  }
+}

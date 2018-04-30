@@ -1,0 +1,27 @@
+//Forms
+
+.form {
+  &-exchange {
+    &--amount {
+      //width: 100px !important;
+    }
+  }
+
+  &-control--btb {
+    border-color: $brand-gray-light;
+    background-color: $brand-gray-light;
+    @include box-shadow(none);
+
+    &:hover, &:focus {
+      @include box-shadow(none);
+    }
+
+    &:hover {
+      background-color: $white;
+    }
+    &:focus {
+      background-color: $white;
+      border-color: $brand-red;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+// Button Groups
+.btn-group {
+  &--btb {
+    .btn {
+      border-color: $brand-gray-light;
+      background-color: $brand-gray-light;
+    }
+  }
+}

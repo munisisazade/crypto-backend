@@ -1,0 +1,17 @@
+// Font imports
+//@import url('https://fonts.googleapis.com/css?family=Comfortaa:300,400,700');
+
+// * Font families //-------------------------------------*/
+@each $slug, $fonts, $weight in
+                (MarkPro,MarkPro-Heavy,900),
+                (MarkPro,MarkPro-Medium,500),
+                (PFSquareSansPro, PFSquareSansPro-Regular, 300),
+                (PFSquareSansPro, PFSquareSansPro-Regular, 400),
+                (PFSquareSansPro-Bold, PFSquareSansPro-Bold, 700) {
+  .font-#{$slug} {
+    font-family: "#{$fonts}", $font-family-sans-serif;
+    @if variable-exists(weight) {
+      font-weight: #{$weight};
+    }
+  }
+}
