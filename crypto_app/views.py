@@ -67,7 +67,6 @@ class UserView(generic.TemplateView):
         return ctx
 
     def post(self, request, *args, **kwargs):
-        encoded, decoded = "", ""
         _ctx = self.get_context_data(*args, **kwargs)
         if u'encode_form' in request.POST:
             _encode = request.POST.get("encode").upper()
@@ -75,8 +74,6 @@ class UserView(generic.TemplateView):
             encoded = encoder_task(text=_encode, token=_token)
             if encoded and isinstance(encoded, str):
                 _ctx["encoded"] = encoded
-                _ctx["encode"] = _encode
-                _ctx["token"] = _token
             elif encoded and not isinstance(encoded, str) and encoded["error"]:
                 if encoded["error"] == 'no-text':
                     _ctx["error"] = 'Şifrələnəcək sözü daxil edin!'
@@ -84,6 +81,8 @@ class UserView(generic.TemplateView):
                     _ctx["error"] = 'Açar sözü daxil edin!'
             else:
                 _ctx["error"] = "Əlifbadan kənara çıxmayın"
+            _ctx["encode"] = _encode
+            _ctx["token"] = _token
             return render(request, self.template_name, context=_ctx)
         elif u'decode_form' in request.POST:
             _decode = request.POST.get("decode").upper()
@@ -91,17 +90,16 @@ class UserView(generic.TemplateView):
             decoded = decoder_task(text=_decode, token=_token)
             if decoded and isinstance(decoded, str):
                 _ctx["decoded"] = decoded
-                _ctx["encoded"] = _decode
-                _ctx["decode"] = _decode
-                _ctx["encode"] = decoded
-                _ctx["token"] = _token
             elif decoded and not isinstance(decoded, str) and decoded["error"]:
                 if decoded["error"] == 'no-text':
                     _ctx["error"] = 'Deşifrələnəcək sözü daxil edin!'
                 elif decoded["error"] == 'no-token':
-
                     _ctx["error"] = 'Açar sözü daxil edin!'
             else:
                 _ctx["error"] = 'Əlifbadan kənara çıxmayın'
+            _ctx["encoded"] = _decode
+            _ctx["decode"] = _decode
+            _ctx["encode"] = decoded
+            _ctx["token"] = _token
             return render(request, self.template_name, context=_ctx)
         return render(request, self.template_name, self.get_context_data(*args, **kwargs))

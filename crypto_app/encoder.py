@@ -81,7 +81,7 @@ class Encoder:  # şifrələmək prosesini yerine yetirən class
             encode_symbol = self.token[token_index]  # acar sozun cari simvolu
             cycle = self.number_of_conditions - 1  # her herf ucun mumkun tekrarlanmalarin sayi
 
-            if not x in self.ALPHABET or not encode_symbol in self.ALPHABET:
+            if x not in self.ALPHABET or encode_symbol not in self.ALPHABET:
                 print("Elifbadan kenara cixmayin!")
                 self.alpabet_interruption = True
                 return

@@ -48,7 +48,8 @@ services:
     restart: "always"
     env_file: .env
     environment:
-      - DEBUG=True
+      - VIRTUAL_HOST=crypto.ismayilrahimli.com,localhost
+      - VIRTUAL_PORT=8001
       - TIMEOUT=300
       - HTTP_PORT=8001
       - STATS_PORT=8002
