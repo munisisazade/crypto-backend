@@ -2,7 +2,7 @@ import math
 import random
 
 
-class Encoder():  # şifrələmək prosesini yerine yetirən class
+class Encoder:  # şifrələmək prosesini yerine yetirən class
 
     letters = list()
 

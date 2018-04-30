@@ -28,7 +28,8 @@ def create_alphabet(_list):
     f = Alphabed(title=_list)
     _letters = ""
     for i in range(int(number_of_conditions)):  # Hər hərflə başlayan sətrləri iterasiya edirəm | range(6) => 0..5
-        for j, y in enumerate(letters):  # Hər iterasiyada ötürülmüş listi enumerate vasitəsilə indexləyərək iterasiya edirəm   exmple: j=0, y=("A", "B", "C", "D", "E" )
+        for j, y in enumerate(
+                letters):  # Hər iterasiyada ötürülmüş listi enumerate vasitəsilə indexləyərək iterasiya edirəm   exmple: j=0, y=("A", "B", "C", "D", "E" )
             if (i + j) % number_of_conditions == 0 or j % number_of_conditions == number_of_conditions:
                 line = (j, y)
                 _letters += str(line) + "\n"
@@ -39,14 +40,40 @@ def create_alphabet(_list):
 @shared_task
 def encoder_task(text, token):
     _alphabed = Alphabed.objects.last()
-    _encoder = Encoder(token=token, alphabet=_alphabed)
-    return _encoder.encode(text)
+    interruption = False
+    if not text:
+        return {"error": "no-text"}
+    elif not token:
+        return {"error": "no-token"}
+    for i, x in enumerate(text):
+        if x not in _alphabed.title:
+            interruption = True
+    for i, x in enumerate(token):
+        if x not in _alphabed.title:
+            interruption = True
+    if not interruption:
+        _encoder = Encoder(token=token, alphabet=_alphabed)
+        return _encoder.encode(text)
+    else:
+        return None
 
 
 @shared_task
 def decoder_task(text, token):
     _alphabed = Alphabed.objects.last()
-    _encoder = Encoder(token=token, alphabet=_alphabed)
-    return _encoder.decode(text)
-
-
+    interruption = False
+    if not text:
+        return {"error": "no-text"}
+    elif not token:
+        return {"error": "no-token"}
+    for i, x in enumerate(text):
+        if x not in _alphabed.title:
+            interruption = True
+    for i, x in enumerate(token):
+        if x not in _alphabed.title:
+            interruption = True
+    if not interruption:
+        _encoder = Encoder(token=token, alphabet=_alphabed)
+        return _encoder.decode(text)
+    else:
+        return None
