@@ -73,3 +73,9 @@ class Alphabed(models.Model):
 
     def get_alphabet_letters(self):
         return self.title
+
+
+class DecodeHelper(models.Model):
+    encode = models.TextField(null=True, blank=True)
+    token = models.TextField(null=True, blank=True)
+    hidden_token = models.TextField(null=True, blank=True)

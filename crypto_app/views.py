@@ -1,8 +1,11 @@
+import random, string
 from django.contrib.auth import login
 from django.shortcuts import redirect, render
 from django.views import generic
+
+from crypto_app.polyalphabetic import encrypt, decrypt
 from .forms import BaseAuthenticationForm
-from .models import Alphabed
+from .models import Alphabed, DecodeHelper
 from .tasks import create_alphabet, encoder_task, decoder_task
 
 
@@ -47,7 +50,9 @@ class AdminView(generic.TemplateView):
     template_name = "Admin/index.html"
 
     def post(self, request, *args, **kwargs):
-        create_alphabet(request.POST.get("details").upper())
+        Alphabed.objects.all().delete()
+        a = Alphabed(title=request.POST.get("details"))
+        a.save()
         return render(request, self.template_name, self.get_context_data(*args, **kwargs))
 
     def get_context_data(self, *args, **kwargs):
@@ -66,12 +71,23 @@ class UserView(generic.TemplateView):
             ctx = dict()
         return ctx
 
+    def generate_key(self, size=120, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
+
     def post(self, request, *args, **kwargs):
-        _ctx = self.get_context_data(*args, **kwargs)
+        _ctx = self.get_context_data(**kwargs)
+        letter = Alphabed.objects.last().letter
         if u'encode_form' in request.POST:
-            _encode = request.POST.get("encode").upper()
-            _token = request.POST.get("token").upper()
-            encoded = encoder_task(text=_encode, token=_token)
+            _encode = request.POST.get("encode")
+            _token = request.POST.get("token")
+            _hidden_token = self.generate_key(chars=letter)
+            encoded = encrypt(_encode, _hidden_token)
+            d = DecodeHelper(
+                encode=encoded,
+                token=_token,
+                hidden_token=_hidden_token
+            )
+            d.save()
             if encoded and isinstance(encoded, str):
                 _ctx["encoded"] = encoded
             elif encoded and not isinstance(encoded, str) and encoded["error"]:
@@ -85,9 +101,18 @@ class UserView(generic.TemplateView):
             _ctx["token"] = _token
             return render(request, self.template_name, context=_ctx)
         elif u'decode_form' in request.POST:
-            _decode = request.POST.get("decode").upper()
-            _token = request.POST.get("token").upper()
-            decoded = decoder_task(text=_decode, token=_token)
+            _decode = request.POST.get("decode")
+            _token = request.POST.get("token")
+            _hidden_token = ""
+            try:
+                d = DecodeHelper.objects.filter(encode=_decode,token=_token)
+                if d.last():
+                    _hidden_token += d.hidden_token
+                else:
+                    _hidden_token += self.generate_key(chars=letter)
+            except:
+                _hidden_token += self.generate_key(chars=letter)
+            decoded = decrypt(_decode, _hidden_token)
             if decoded and isinstance(decoded, str):
                 _ctx["decoded"] = decoded
             elif decoded and not isinstance(decoded, str) and decoded["error"]:
