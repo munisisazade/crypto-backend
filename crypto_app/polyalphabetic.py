@@ -5,7 +5,8 @@ import string
 from crypto_app.models import Alphabed
 
 ALPHABET = Alphabed.objects.all().last().title
-CHARACTERS_THAT_MUST_REMAIN_THE_SAME = string.digits + string.punctuation + string.whitespace
+# ALPHABET = """abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~"""
+CHARACTERS_THAT_MUST_REMAIN_THE_SAME = " "
 
 
 def cycle_get(lst, index):
@@ -68,7 +69,7 @@ def encrypt(text, key, reverse_operation=False):
     >>> encrypt("the quick brown fox jumps over the lazy dog","gvufigfwiufw")
     'zcy vcohg jltst aic rarla iaax obj tgeu lil'
     """
-    text = text.lower()
+    text = text
     key = convert_key_to_numbers(key)
     index_of_key = 0
     result = ""
