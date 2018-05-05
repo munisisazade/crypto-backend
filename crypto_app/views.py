@@ -71,7 +71,7 @@ class UserView(generic.TemplateView):
             ctx = dict()
         return ctx
 
-    def generate_key(self, size=120, chars=string.ascii_uppercase + string.digits):
+    def generate_key(self, size=120, chars=string.ascii_letters + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
     def post(self, request, *args, **kwargs):
@@ -80,7 +80,20 @@ class UserView(generic.TemplateView):
         if u'encode_form' in request.POST:
             _encode = request.POST.get("encode")
             _token = request.POST.get("token")
-            _hidden_token = self.generate_key(chars=letter)
+            _hidden_token = self.generate_key()
+            if _encode == "":
+                _ctx["error"] = 'Şifrələnəcək sözü daxil edin!'
+                return render(request, self.template_name, context=_ctx)
+            if _token == "":
+                _ctx["error"] = 'Açar sözü daxil edin!'
+                return render(request, self.template_name, context=_ctx)
+            error_letter = ""
+            for char in _encode:
+                if not char in letter:
+                    error_letter += "True"
+            if error_letter == "True":
+                _ctx["error"] = "Əlifbadan kənara çıxmayın"
+                return render(request, self.template_name, context=_ctx)
             encoded = encrypt(_encode, _hidden_token)
             d = DecodeHelper(
                 encode=encoded,
@@ -109,9 +122,9 @@ class UserView(generic.TemplateView):
                 if d.last():
                     _hidden_token += d.last().hidden_token
                 else:
-                    _hidden_token += self.generate_key(chars=letter)
+                    _hidden_token += self.generate_key()
             except:
-                _hidden_token += self.generate_key(chars=letter)
+                _hidden_token += self.generate_key()
             decoded = decrypt(_decode, _hidden_token)
             if decoded and isinstance(decoded, str):
                 _ctx["decoded"] = decoded
