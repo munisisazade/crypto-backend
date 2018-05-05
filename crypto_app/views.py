@@ -80,6 +80,8 @@ class UserView(generic.TemplateView):
         if u'encode_form' in request.POST:
             _encode = request.POST.get("encode")
             _token = request.POST.get("token")
+            _ctx["encode"] = _encode
+            _ctx["token"] = _token
             _hidden_token = self.generate_key()
             if _encode == "":
                 _ctx["error"] = 'Şifrələnəcək sözü daxil edin!'
@@ -110,8 +112,6 @@ class UserView(generic.TemplateView):
                     _ctx["error"] = 'Açar sözü daxil edin!'
             else:
                 _ctx["error"] = "Əlifbadan kənara çıxmayın"
-            _ctx["encode"] = _encode
-            _ctx["token"] = _token
             return render(request, self.template_name, context=_ctx)
         elif u'decode_form' in request.POST:
             _decode = request.POST.get("decode")
