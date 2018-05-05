@@ -107,7 +107,7 @@ class UserView(generic.TemplateView):
             try:
                 d = DecodeHelper.objects.filter(encode=_decode,token=_token)
                 if d.last():
-                    _hidden_token += d.hidden_token
+                    _hidden_token += d.last().hidden_token
                 else:
                     _hidden_token += self.generate_key(chars=letter)
             except:
