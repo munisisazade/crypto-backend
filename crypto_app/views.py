@@ -96,7 +96,7 @@ class UserView(generic.TemplateView):
             if error_letter == "True":
                 _ctx["error"] = "Əlifbadan kənara çıxmayın"
                 return render(request, self.template_name, context=_ctx)
-            encoded = encrypt(_encode, _hidden_token)
+            encoded = encrypt(_encode.replace(" ","`"), _hidden_token)
             d = DecodeHelper(
                 encode=encoded,
                 token=_token,
@@ -126,6 +126,7 @@ class UserView(generic.TemplateView):
             except:
                 _hidden_token += self.generate_key()
             decoded = decrypt(_decode, _hidden_token)
+            decoded = decoded.replace("`"," ")
             if decoded and isinstance(decoded, str):
                 _ctx["decoded"] = decoded
             elif decoded and not isinstance(decoded, str) and decoded["error"]:
