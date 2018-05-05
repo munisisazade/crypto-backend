@@ -76,7 +76,7 @@ class UserView(generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         _ctx = self.get_context_data(**kwargs)
-        letter = Alphabed.objects.last().letter
+        letter = Alphabed.objects.last().title
         if u'encode_form' in request.POST:
             _encode = request.POST.get("encode")
             _token = request.POST.get("token")
