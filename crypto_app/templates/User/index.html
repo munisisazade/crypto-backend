@@ -14,7 +14,7 @@
                                 {% csrf_token %}
                                 <h2 class="text-center">Encode</h2>
                                 <textarea name="encode" placeholder="Encode">{{ encode|default:""}}</textarea>
-                                <input name="token" placeholder="Token" value={{ token|default:""}}>
+                                <input name="token" placeholder="Token" value={{ encode_token|default:""}}>
                                 <button name="encode_form" type="submit" class="btn btn-primary">Encode</button>
                             </form>
                         </div>
@@ -30,7 +30,7 @@
                                 {% csrf_token %}
                                 <h2 class="text-center">Decode</h2>
                                 <textarea name="decode" placeholder="Decode">{{ decode|default:"" }}</textarea>
-                                <input name="token" placeholder="Token" value={{ token|default:"" }}>
+                                <input name="token" placeholder="Token" value={{ decode_token|default:"" }}>
                                 <button name="decode_form" type="submit" class="btn btn-primary">Decode</button>
                             </form>
                         </div>

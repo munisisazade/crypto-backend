@@ -81,7 +81,7 @@ class UserView(generic.TemplateView):
             _encode = request.POST.get("encode")
             _token = request.POST.get("token")
             _ctx["encode"] = _encode
-            _ctx["token"] = _token
+            _ctx["encode_token"] = _token
             _hidden_token = self.generate_key()
             if _encode == "":
                 _ctx["error"] = 'Şifrələnəcək sözü daxil edin!'
@@ -138,7 +138,7 @@ class UserView(generic.TemplateView):
                 _ctx["error"] = 'Əlifbadan kənara çıxmayın'
             _ctx["encoded"] = _decode
             _ctx["decode"] = _decode
-            _ctx["encode"] = decoded
-            _ctx["token"] = _token
+            # _ctx["encode"] = decoded
+            _ctx["decode_token"] = _token
             return render(request, self.template_name, context=_ctx)
         return render(request, self.template_name, self.get_context_data(*args, **kwargs))
