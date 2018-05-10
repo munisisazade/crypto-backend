@@ -91,7 +91,7 @@ class UserView(generic.TemplateView):
                 return render(request, self.template_name, context=_ctx)
             error_letter = ""
             for char in _encode:
-                if not char in letter:
+                if char != ' ' and not char in letter:
                     error_letter += "True"
             if error_letter == "True":
                 _ctx["error"] = "Əlifbadan kənara çıxmayın"
