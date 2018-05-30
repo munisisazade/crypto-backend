@@ -395,4 +395,7 @@ a.animated-button.thar-three:before {
     width: 400px;
     margin: 20px auto 0 auto;
     min-height: 80px;
+    p{
+        word-wrap: break-word;
+    }
 }
